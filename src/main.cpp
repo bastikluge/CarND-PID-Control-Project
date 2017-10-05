@@ -66,11 +66,11 @@ int main()
           if ( speed > 20.0 ) throttle = 0.0;
           
           // DEBUG
-          std::cout << "CTE: " << cte 
-                    << " Speed: " << speed
-                    << " Angle: " << angle
-                    << " Steering Value: " << steer_value << std::endl;
-          if ( pid.getNumberOfControlSteps() % 10 == 0 )
+          //std::cout << "CTE: " << cte 
+          //          << " Speed: " << speed
+          //          << " Angle: " << angle
+          //          << " Steering Value: " << steer_value << std::endl;
+          if ( pid.getNumberOfControlSteps() % 50 == 0 )
           {
             std::cout << "==> Average control error[" 
                       << pid.getNumberOfControlSteps() << "]: " 
