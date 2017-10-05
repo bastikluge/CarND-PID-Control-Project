@@ -18,17 +18,25 @@ void PID::init(double Kp, double Ki, double Kd)
   mKp = Kp;
   mKi = Ki;
   mKd = Kd;
+
+  mControlCount = 0;
 }
 
 double PID::getControlValue(double cte)
 {
+  mControlCount++;
   mD_error  = cte - mP_error;
   mP_error  = cte;
   mI_error += cte;
   return -(mKp*mP_error + mKi*mI_error + mKd*mD_error);
 }
 
-double PID::getTotalError() const
+double PID::getAverageError() const
 {
-  return mI_error;
+  return mI_error / double(mControlCount);
+}
+
+unsigned PID::getNumberOfControlSteps() const
+{
+  return mControlCount;
 }

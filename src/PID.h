@@ -29,7 +29,12 @@ public:
   /*
   * Calculate the total PID error (sum of all observed errors).
   */
-  double getTotalError() const;
+  double getAverageError() const;
+
+  /**
+  * Returns the number of control steps
+  */
+  unsigned getNumberOfControlSteps() const;
 
 private:
 
@@ -47,6 +52,10 @@ private:
   double mKi;
   double mKd;
 
+  /**
+  * Counter of control actuations
+  */
+  unsigned mControlCount;
 };
 
 #endif /* PID_H */
