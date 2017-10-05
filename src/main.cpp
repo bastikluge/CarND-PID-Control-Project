@@ -32,8 +32,7 @@ int main()
 {
   uWS::Hub h;
 
-  PID pid(0.1, 0.01, 0.01);
-
+  PID pid(0.1, 0.0, 0.0);
   // TODO: Find reasonable parameters
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
