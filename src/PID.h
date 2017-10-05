@@ -29,7 +29,7 @@ public:
   /*
   * Calculate the total PID error (sum of all observed errors).
   */
-  double totalError() const;
+  double getTotalError() const;
 
 private:
 

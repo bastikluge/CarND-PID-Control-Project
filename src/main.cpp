@@ -32,9 +32,9 @@ int main()
 {
   uWS::Hub h;
 
-  PID pid(0.1, 0.0, 0.01);
+  PID pid(0.1, 0.0, 0.05);
   // TODO: Find reasonable parameters
-
+  unsigned control_count(0);
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -65,11 +65,19 @@ int main()
           double throttle(0.3);
           if ( speed > 20.0 ) throttle = 0.0;
 
+          // calculate average error of control
+          control_count++;
+          double average_error = pid.getTotalError() / double(control_count);
+
           // DEBUG
           std::cout << "CTE: " << cte 
                     << " Speed: " << speed
                     << " Angle: " << angle
                     << " Steering Value: " << steer_value << std::endl;
+          if ( control_count % 10 == 0 )
+          {
+            std::cout << "==> Average control error: " << average_error << std::endl;
+          }
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;

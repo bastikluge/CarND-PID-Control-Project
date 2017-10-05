@@ -28,7 +28,7 @@ double PID::getControlValue(double cte)
   return -(mKp*mP_error + mKi*mI_error + mKd*mD_error);
 }
 
-double PID::totalError() const
+double PID::getTotalError() const
 {
   return mI_error;
 }
