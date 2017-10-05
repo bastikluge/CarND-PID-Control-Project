@@ -60,6 +60,9 @@ int main()
           if ( steer_value < -1.0 ) steer_value = -1.0;
           if ( steer_value >  1.0 ) steer_value =  1.0;
 
+          // limit speed
+          if ( speed > 20.0 ) speed = 20.0;
+
           // DEBUG
           std::cout << "CTE: " << cte 
                     << " Speed: " << speed
@@ -69,6 +72,7 @@ int main()
           json msgJson;
           msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = 0.3;
+          msgJson["speed"] = speed;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           //std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
