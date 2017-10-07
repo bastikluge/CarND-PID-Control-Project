@@ -1,5 +1,6 @@
 #include "Twiddle.h"
 #include <iostream>
+#include <math.h>
 
 Twiddle::Twiddle(double k_p, double k_i, double k_d, double threshold)
   : m_k()
@@ -13,9 +14,9 @@ Twiddle::Twiddle(double k_p, double k_i, double k_d, double threshold)
     m_k[0] = k_p;
     m_k[1] = k_i;
     m_k[2] = k_d;
-    m_dk[0] = abs(k_p)/5.0;
-    m_dk[1] = abs(k_i)/5.0;
-    m_dk[2] = abs(k_d)/5.0;
+    m_dk[0] = fabs(k_p)/10.0;
+    m_dk[1] = fabs(k_i)/10.0;
+    m_dk[2] = fabs(k_d)/10.0;
 }
   
 Twiddle::~Twiddle()
@@ -24,7 +25,7 @@ Twiddle::~Twiddle()
   
 void Twiddle::onResult(double error, double &k_p, double &k_i, double &k_d)
 {
-  if ( abs(m_dk[0]) + abs(m_dk[1]) + abs(m_dk[2]) > THRESHOLD )
+  if ( fabs(m_dk[0]) + fabs(m_dk[1]) + fabs(m_dk[2]) > THRESHOLD )
   {
     if ( m_isInitial )
     {
@@ -48,7 +49,7 @@ void Twiddle::onResult(double error, double &k_p, double &k_i, double &k_d)
         else
         {
           m_k[m_index]  += m_dk[m_index];
-          m_dk[m_index] *= 0.9;
+          m_dk[m_index] *= 0.8;
     
           m_index++;
           m_isIncrease = true;
@@ -60,14 +61,14 @@ void Twiddle::onResult(double error, double &k_p, double &k_i, double &k_d)
         m_bestError = error;
         if ( m_isIncrease )
         {
-          m_dk[m_index] *= 1.1;
+          m_dk[m_index] *= 1.2;
     
           m_index++;
           // m_isIncrease remains constant, twiddle next tries to increase the next gain 
         }
         else
         {
-          m_dk[m_index] *= 1.1;
+          m_dk[m_index] *= 1.2;
     
           m_index++;
           m_isIncrease = true;
@@ -95,15 +96,15 @@ void Twiddle::onResult(double error, double &k_p, double &k_i, double &k_d)
     
     // debug output
     std::cout << "Twiddle updated: (k_p, k_i, k_d) = (" << m_k[0] << ", " << m_k[1] << ", " << m_k[2] << ")" << std::endl;
-    std::cout << "        ... |increment| = |(" << m_dk[0] << ", " << m_dk[1] << ", " << m_dk[2] << ")| = "
-              <<  abs(m_dk[0]) + abs(m_dk[1]) + abs(m_dk[2]) << " >= threshold = " << THRESHOLD << std::endl;
+    std::cout << "        ... |dk| = |(" << m_dk[0] << ", " << m_dk[1] << ", " << m_dk[2] << ")| = "
+              <<  fabs(m_dk[0]) + fabs(m_dk[1]) + fabs(m_dk[2]) << " >= " << THRESHOLD << std::endl;
   }
   else
   {
     // debug output
     std::cout << "Twiddle terminated: (k_p, k_i, k_d) = (" << m_k[0] << ", " << m_k[1] << ", " << m_k[2] << ")" << std::endl;
-    std::cout << "        ... |increment| = |(" << m_dk[0] << ", " << m_dk[1] << ", " << m_dk[2] << ")| = "
-              <<  abs(m_dk[0]) + abs(m_dk[1]) + abs(m_dk[2]) << " < threshold = " << THRESHOLD << std::endl;
+    std::cout << "        ... |dk| = |(" << m_dk[0] << ", " << m_dk[1] << ", " << m_dk[2] << ")| = "
+              <<  fabs(m_dk[0]) + fabs(m_dk[1]) + fabs(m_dk[2]) << " < " << THRESHOLD << std::endl;
   }
   
   // debug output

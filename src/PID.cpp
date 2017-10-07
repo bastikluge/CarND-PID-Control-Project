@@ -19,7 +19,7 @@ double PID::getControlValue(double cte)
   mP_error  = cte;
   mI_error += cte;
 
-  if ( mRunTwiddle && (mControlCount % 10000 == 0) )
+  if ( mRunTwiddle && (mControlCount % 2800 == 0) ) // approximately one lap
   {
     if ( !mStartedTwiddle )
     {
@@ -34,7 +34,7 @@ double PID::getControlValue(double cte)
       init(mKp, mKi, mKd);
     }
   }
-  else if ( !mRunTwiddle && (mControlCount % 100 == 0) )
+  else if ( mControlCount % 200 == 0 )
   {
     // debug output: error status
     std::cout << "==> Average control error[" << mControlCount << "]: " 
