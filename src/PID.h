@@ -1,6 +1,8 @@
 #ifndef PID_H
 #define PID_H
 
+#include "Twiddle.h"
+
 class PID
 {
 public:
@@ -8,17 +10,12 @@ public:
   /*
   * Constructor
   */
-  PID(double Kp=0.0, double Ki=0.0, double Kd=0.0);
+  PID(double Kp=0.3, double Ki=0.0001, double Kd=1.0, bool runTwiddle=false);
 
   /*
   * Destructor.
   */
   virtual ~PID();
-
-  /*
-  * Initialize PID.
-  */
-  void init(double Kp, double Ki, double Kd);
 
   /*
   * Update the PID error variables given cross track error
@@ -31,10 +28,17 @@ public:
   */
   double getAverageError() const;
 
-  /**
-  * Returns the number of control steps
+private:
+  
+  /*
+  * Initialize PID.
   */
-  unsigned getNumberOfControlSteps() const;
+  void init(double Kp, double Ki, double Kd);
+
+private: // no impl
+
+  PID(const PID& );
+  PID& operator=(const PID&);
 
 private:
 
@@ -56,6 +60,18 @@ private:
   * Counter of control actuations
   */
   unsigned mControlCount;
+
+  /**
+  * Flag, which indicates whether Twiddle algorithm will be executed
+  */
+  bool mRunTwiddle;
+  bool mStartedTwiddle;
+
+  /**
+  * Twiddle control gain optimizer
+  */
+  Twiddle mTwiddle;
+
 };
 
 #endif /* PID_H */
